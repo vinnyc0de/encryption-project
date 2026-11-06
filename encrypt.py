@@ -1,24 +1,42 @@
 import random
 import string
 
-# Create a clean, unique list of characters (no duplicates)
-# string.printable includes letters, digits, punctuation, and whitespace
-chars = list(set(string.printable))
+# Generate unique characters
+chars = list(string.printable)
 
-# Create the key mapping
+# Generate encryption key
 keys = chars.copy()
-random.shuffle(keys)
+random.SystemRandom().shuffle(keys)
 
-# Build a mapping dictionary for instant lookups
+# Create encryption and decryption mappings
 encryption_map = dict(zip(chars, keys))
+decryption_map = {v: k for k, v in encryption_map.items()}
 
-# Encryption process
-original_text = input("Enter the text to be encrypted: ")
-new_text = ""
 
-for char in original_text:
-    # If the character is in our list, swap it. If not, leave it as is.
-    new_text += encryption_map.get(char, char)
+def encrypt(message):
+    encrypted_text = ""
 
-print("\nOriginal text:", original_text)
-print("Encrypted text:", new_text)
+    for char in message:
+        encrypted_text += encryption_map.get(char, char)
+
+    return encrypted_text
+
+
+def decrypt(message):
+    decrypted_text = ""
+
+    for char in message:
+        decrypted_text += decryption_map.get(char, char)
+
+    return decrypted_text
+
+
+# Main program
+original_text = input("Enter text to encrypt: ")
+
+encrypted_text = encrypt(original_text)
+decrypted_text = decrypt(encrypted_text)
+
+print("\nOriginal:", original_text)
+print("Encrypted:", encrypted_text)
+print("Decrypted:", decrypted_text)
